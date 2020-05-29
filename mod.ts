@@ -23,6 +23,24 @@ export class Dice {
     }
 }
 
+export const parseDiceString = (diceStr: string): number => {
+    let parsedString = '';
+    const subsetStartDelim = /\(/;
+    const subsetEndDelim = /\)/;
+    const subsetStart = diceStr.search(subsetStartDelim);
+    const subsetEnd = diceStr.search(subsetEndDelim);
+    if (subsetStart !== -1 && subsetEnd != -1) {
+        // console.log(diceStr.substring(subsetStart+1, subsetEnd));
+        const subsetResult = parseDiceString(diceStr.substring(subsetStart+1, subsetEnd));
+        const regexTerms = RegExp(/\+|\-|\*|\//);
+        const term1 = regexTerms.test(diceStr[subsetStart-1]) ? '' : '*';
+        const term2 = regexTerms.test(diceStr[subsetEnd+1]) ? '' : '*';
+        parsedString = [diceStr.substring(0, subsetStart), term1, subsetResult, term2, diceStr.substring(subsetEnd+1)].join('');
+        console.log(parsedString);
+    }
+    return 4;
+};
+
 /** Provided shorthand for a four sided dice */
 export const d4 = new Dice(4);
 /** Provided shorthand for a six sided dice */
